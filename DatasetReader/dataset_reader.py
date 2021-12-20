@@ -37,7 +37,7 @@ def remove_non_elegible_classes(df, target_class_index, n_classes, subset):
     
     print('Dataset size after duplicates removal: %s' % len(dataset))
 
-    save_dateset_csv(dataset, 'dataset')
+    # save_dateset_csv(dataset, 'dataset')
 
     return dataset
 

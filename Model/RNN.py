@@ -2,14 +2,25 @@ import tensorflow as tf
 from tensorflow.keras import layers
 from tensorflow.keras.layers.experimental import preprocessing
 import numpy as np
+import time
 
-def run(X_train, y_train, X_test, n_outputs, epochs = 10):
+def run(X_train, y_train, X_test, n_outputs, epochs = 10, proba=False):
+    print('Running RNN finished...')
+
     comment_train, comment_test = X_train.iloc[:, 1], X_test.iloc[:, 1]
     
     m = model(comment_train, n_outputs)
+    ini_time = time.time_ns()
     m = fit(m, comment_train, y_train, epochs=epochs)
+    end_time = time.time_ns()
 
-    return predict(m, comment_test)
+    if proba:
+        predictions = predict_proba(m, comment_test)
+    else:
+        predictions = predict(m, comment_test)
+        
+    print('RNN finished.')
+    return predictions, end_time-ini_time
 
 def model(comment, n_outputs):
     encoder_train = preprocessing.TextVectorization(output_mode="int")
@@ -37,14 +48,16 @@ def model(comment, n_outputs):
 
 
 def fit(model, X_train, y_train, epochs):
-    model.fit(X_train, y_train, epochs=epochs, verbose=1)
+    model.fit(X_train, y_train, epochs=epochs, verbose=0)
     return model
 
 
-def predict(model, X_test):
+def predict_proba(model, X_test):
     predictions = model.predict(X_test)
 
     return predictions
 
 
-
+def predict(model, X_test):
+    predictions = model.predict(X_test)
+    return [np.argmax(t, axis=0) for t in np.asarray(predictions)]
