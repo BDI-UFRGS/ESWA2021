@@ -13,19 +13,19 @@ def get_difference(y_test, prediction):
     return p
 
 
-def plot_mean(y_test_all, models):
+def plot_mean(exp, models):
     plt.figure()
 
-    for name, predictions in models:
+    for name, y, p in models:
         tprs = []
         aucs = []
         mean_fpr = np.linspace(0, 1, 100)
 
-        for i in range(len(y_test_all)):
-            y_test = y_test_all[i]
+        for i in range(len(y)):
+            y_test = y[i]
             y_test = [np.argmax(t, axis=0) for t in np.asarray(y_test)]
 
-            prediction = predictions[i]
+            prediction = p[i]
             prediction = get_difference(y_test, prediction)
             fpr, tpr, _ = roc_curve(y_test, prediction, pos_label=1)
             roc_auc = auc(fpr, tpr)
@@ -47,9 +47,9 @@ def plot_mean(y_test_all, models):
     plt.ylim([0.0, 1.0])
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
-    plt.title('Receiver operating characteristic')
+    plt.title('ROC curve of the experiment %s' % exp.capitalize())
     plt.legend(loc="lower right")
-    plt.show()
+    plt.savefig('%s.png' % exp)
 
 def plot(y_test, predictions):
     y_test = [np.argmax(t, axis=0) for t in np.asarray(y_test)]

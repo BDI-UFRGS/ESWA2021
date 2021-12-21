@@ -10,7 +10,7 @@ def get_elegible_indexes(df, target_class_index, n_classes):
 
 
 def remove_duplicates(item, subset):
-    return item.drop_duplicates(subset=[item.columns[i] for i in subset], keep='first')
+    return item.drop_duplicates(subset=[item.columns[i] for i in subset], keep='last')
 
 
 def save_dateset_csv(dataset, name):

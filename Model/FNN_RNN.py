@@ -12,18 +12,23 @@ def run(X_train, y_train, X_test, n_outputs, epochs = 10, proba=False):
     
     m = model(comment_train, n_outputs)
 
-    ini_time = time.time_ns()
+    train_start_time = time.time_ns()
     m = fit(m, [comment_train, word_vectors_train], y_train, epochs=epochs)
-    end_time = time.time_ns()
+    train_end_time = time.time_ns()
 
 
     if proba:
+        test_start_time = time.time_ns()
         predictions = predict_proba(m, [comment_test, word_vectors_test])
+        test_end_time = time.time_ns()
     else:
+        test_start_time = time.time_ns()
         predictions = predict(m, [comment_test, word_vectors_test])
-        
+        test_end_time = time.time_ns()
+
     print('FNN-RNN finished.')
-    return predictions, end_time-ini_time
+    return predictions, train_end_time-train_start_time, test_end_time-test_start_time 
+
 
 def model(comment, n_outputs):
     encoder_train = preprocessing.TextVectorization(output_mode="int")

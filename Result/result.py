@@ -5,7 +5,7 @@ import pandas as pd
 import seaborn as sn
 
 
-def save_results_all(name, y_test, predictions, class_names):
+def save_confusion_matrix_all(name, y_test, predictions, class_names):
 
     y = []
     p = []
@@ -15,6 +15,7 @@ def save_results_all(name, y_test, predictions, class_names):
         y = np.concatenate((y, y_t), axis=None)
 
     for pred in predictions:
+        pred = [np.argmax(t, axis=0) for t in np.asarray(pred)]
         p = np.concatenate((p, pred), axis=None)
 
     print(y)
@@ -22,10 +23,11 @@ def save_results_all(name, y_test, predictions, class_names):
 
     save_confusion_matrix(y, p, name, class_names)
 
-def save_results(name, y_test, predictions, class_names, time):
+def save_results(name, y_test, predictions, class_names, train_time, test_time):
     y_test = [np.argmax(t, axis=0) for t in np.asarray(y_test)]
-    # predictions = [np.argmax(t, axis=0) for t in np.asarray(predictions)]
-    save_confusion_matrix(y_test, predictions, name, class_names)
+    predictions = [np.argmax(t, axis=0) for t in np.asarray(predictions)]
+
+
     f1_micro = f1_score(y_test, predictions, average='micro', labels=np.unique(predictions))
     f1_macro = f1_score(y_test, predictions, average='macro',labels=np.unique(predictions))
     f1_weighted = f1_score(y_test, predictions, average='weighted',labels=np.unique(predictions))
@@ -35,7 +37,7 @@ def save_results(name, y_test, predictions, class_names, time):
     recall_micro = recall_score(y_test, predictions, average='micro',labels=np.unique(predictions))
     recall_macro = recall_score(y_test, predictions, average='macro',labels=np.unique(predictions))
     recall_weighted = recall_score(y_test, predictions, average='weighted',labels=np.unique(predictions))
-    results = [f1_micro, f1_macro, f1_weighted, precision_micro,precision_macro,precision_weighted,recall_micro,recall_macro,recall_weighted, time]
+    results = [f1_micro, f1_macro, f1_weighted, precision_micro,precision_macro,precision_weighted,recall_micro,recall_macro,recall_weighted, train_time, test_time]
   
     file_output = open(name + '.txt', 'a')
     file_output.write(name + ';' + ';'.join([str(x) for x in results]) + '\n')
@@ -56,7 +58,7 @@ def save_confusion_matrix(y_test, predictions, name, class_names):
     labels = [f'{v1}\n{v2}' for v1, v2 in
           zip(group_counts, group_percentages)]
 
-    labels = np.asarray(labels).reshape(2,2)
+    labels = np.asarray(labels).reshape(len(class_names), len(class_names))
 
     df_cm = pd.DataFrame(conf_mat, index = [i for i in class_names], columns = [i for i in class_names])
     plt.figure()

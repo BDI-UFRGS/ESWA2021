@@ -9,17 +9,21 @@ def run(X_train, y_train, X_test, n_outputs, epochs = 10, proba=False):
     word_vectors_train, word_vectors_test = X_train.iloc[:, 2:], X_test.iloc[:, 2:]
     
     m = model(n_outputs)
-    ini_time = time.time_ns()
-    m = fit(m, word_vectors_train, y_train, epochs=epochs)
-    end_time = time.time_ns()
+    train_start_time = time.time_ns()
+    m = fit(m, word_vectors_train, y_train)
+    train_end_time = time.time_ns()
 
     if proba:
+        test_start_time = time.time_ns()
         predictions = predict_proba(m, word_vectors_test)
+        test_end_time = time.time_ns()
     else:
+        test_start_time = time.time_ns()
         predictions = predict(m, word_vectors_test)
+        test_end_time = time.time_ns()
         
     print('FNN finished.')
-    return predictions, end_time-ini_time
+    return predictions, train_end_time-train_start_time, test_end_time-test_start_time 
 
 def model(n_outputs):
 
