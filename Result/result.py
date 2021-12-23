@@ -61,9 +61,9 @@ def save_confusion_matrix(y_test, predictions, name, class_names):
     labels = np.asarray(labels).reshape(len(class_names), len(class_names))
 
     df_cm = pd.DataFrame(conf_mat, index = [i for i in class_names], columns = [i for i in class_names])
+    # plt.figure(figsize=(30, 20))
     plt.figure()
-    plt.title('Confusion Matrix of experiment %s using the %s model' % (name.split('-')[0].capitalize(), name.split('-')[1].upper()))
+    plt.title('Confusion Matrix of the Experiment %s using the %s model' % (name.split('-')[0].capitalize(), name.split('-')[1].upper()))
 
-    # plt.figure(figsize = (10,6))
     sn.heatmap(df_cm, annot=labels, cmap='Blues', fmt='', vmin=0, vmax=1)
     plt.savefig('%s.png' % name)

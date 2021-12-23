@@ -10,7 +10,7 @@ def run(X_train, y_train, X_test, n_outputs, epochs = 10, proba=False):
     
     m = model(n_outputs)
     train_start_time = time.time_ns()
-    m = fit(m, word_vectors_train, y_train)
+    m = fit(m, word_vectors_train, y_train, epochs=epochs)
     train_end_time = time.time_ns()
 
     if proba:

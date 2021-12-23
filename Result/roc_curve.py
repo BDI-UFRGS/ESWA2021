@@ -14,7 +14,7 @@ def get_difference(y_test, prediction):
 
 
 def plot_mean(exp, models):
-    plt.figure()
+    plt.figure(figsize=(10,6))
 
     for name, y, p in models:
         tprs = []
@@ -40,7 +40,7 @@ def plot_mean(exp, models):
         mean_auc = auc(mean_fpr, mean_tpr)
         std_auc = np.std(aucs)
 
-        plt.plot(mean_fpr, mean_tpr, lw=1, label='Mean ROC %s (AUC = %0.2f $\pm$ %0.2f)' % (name, mean_auc, std_auc))
+        plt.plot(mean_fpr, mean_tpr, lw=1, label='Mean ROC of %s model (AUC = %0.2f $\pm$ %0.2f)' % (name, mean_auc, std_auc))
   
     plt.plot([0, 1], [0, 1], color='navy', lw=1, linestyle='--')
     plt.xlim([0.0, 1.0])
