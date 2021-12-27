@@ -47,9 +47,9 @@ def plot_mean(exp, models):
     plt.ylim([0.0, 1.0])
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
-    plt.title('ROC curve of the experiment %s' % exp.capitalize())
+    plt.title('ROC curve of the Experiment %s' % exp.capitalize())
     plt.legend(loc="lower right")
-    plt.savefig('%s.png' % exp)
+    plt.savefig('%s.png' % exp, bbox_inches='tight', dpi=1000)
 
 def plot(y_test, predictions):
     y_test = [np.argmax(t, axis=0) for t in np.asarray(y_test)]

@@ -23,7 +23,7 @@ def save_confusion_matrix_all(name, y_test, predictions, class_names):
 
     save_confusion_matrix(y, p, name, class_names)
 
-def save_results(name, y_test, predictions, class_names, train_time, test_time):
+def save_results(name, y_test, predictions, class_names, train_time, test_time, train_size, test_size):
     y_test = [np.argmax(t, axis=0) for t in np.asarray(y_test)]
     predictions = [np.argmax(t, axis=0) for t in np.asarray(predictions)]
 
@@ -37,7 +37,7 @@ def save_results(name, y_test, predictions, class_names, train_time, test_time):
     recall_micro = recall_score(y_test, predictions, average='micro',labels=np.unique(predictions))
     recall_macro = recall_score(y_test, predictions, average='macro',labels=np.unique(predictions))
     recall_weighted = recall_score(y_test, predictions, average='weighted',labels=np.unique(predictions))
-    results = [f1_micro, f1_macro, f1_weighted, precision_micro,precision_macro,precision_weighted,recall_micro,recall_macro,recall_weighted, train_time, test_time]
+    results = [f1_micro, f1_macro, f1_weighted, precision_micro,precision_macro,precision_weighted,recall_micro,recall_macro,recall_weighted, train_time, test_time, train_size, test_size]
   
     file_output = open(name + '.txt', 'a')
     file_output.write(name + ';' + ';'.join([str(x) for x in results]) + '\n')
@@ -61,8 +61,8 @@ def save_confusion_matrix(y_test, predictions, name, class_names):
     labels = np.asarray(labels).reshape(len(class_names), len(class_names))
 
     df_cm = pd.DataFrame(conf_mat, index = [i for i in class_names], columns = [i for i in class_names])
-    # plt.figure(figsize=(30, 20))
-    plt.figure()
+    plt.figure(figsize=(30, 20))
+    # plt.figure()
     plt.title('Confusion Matrix of the Experiment %s using the %s model' % (name.split('-')[0].capitalize(), name.split('-')[1].upper()))
 
     sn.heatmap(df_cm, annot=labels, cmap='Blues', fmt='', vmin=0, vmax=1)
