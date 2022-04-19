@@ -33,7 +33,6 @@ def plot_mean(exp, models):
             interp_tpr[0] = 0.0
             tprs.append(interp_tpr)
             aucs.append(roc_auc)
-            # plt.plot(fpr, tpr, lw=1, label='%s FOLD: %s (AUC = %0.2f)' % (name, i+1, roc_auc), alpha=0.3)
 
         mean_tpr = np.mean(tprs, axis=0)
         mean_tpr[-1] = 1.0
@@ -47,9 +46,9 @@ def plot_mean(exp, models):
     plt.ylim([0.0, 1.0])
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
-    plt.title('ROC curve of the Experiment %s' % exp.capitalize())
+    plt.title('%s' % exp.capitalize())
     plt.legend(loc="lower right")
-    plt.savefig('%s.png' % exp, bbox_inches='tight', dpi=1000)
+    plt.savefig('../results/%s.png' % exp, bbox_inches='tight', dpi=1000)
 
 def plot(y_test, predictions):
     y_test = [np.argmax(t, axis=0) for t in np.asarray(y_test)]
@@ -72,34 +71,3 @@ def plot(y_test, predictions):
     plt.show()
 
 
-# def show(y_test, predictions):
-#     y_test = [np.argmax(t, axis=0) for t in np.asarray(y_test)]
-# #     predictions = [np.argmax(t) for t in predictions]
-
-# #     predictions = [np.argmax(t) for t in predictions]
-
-# #     RocCurveDisplay.from_predictions(y_test, predictions, pos_label=1)
-# #     plt.show()
-
-#     p = []
-#     for i in range(len(predictions)):
-#         if y_test[i] == 0:
-#             p.append(1 - predictions[i][0])
-#         else:
-#             p.append(predictions[i][1])
-#     predictions = p
-
-#     fpr, tpr, _ = roc_curve(y_test, predictions, pos_label=1)
-#     roc_auc = auc(fpr, tpr)
-
-#     plt.figure()
-#     plt.plot(fpr, tpr, color='darkorange', lw=1,
-#              label='ROC curve (area = %0.2f)' % roc_auc)
-#     plt.plot([0, 1], [0, 1], color='navy', lw=1, linestyle='--')
-#     plt.xlim([0.0, 1.0])
-#     plt.ylim([0.0, 1.0])
-#     plt.xlabel('False Positive Rate')
-#     plt.ylabel('True Positive Rate')
-#     plt.title('Receiver operating characteristic')
-#     plt.legend(loc="lower right")
-#     plt.show()

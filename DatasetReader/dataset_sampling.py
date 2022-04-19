@@ -16,7 +16,6 @@ def downsample(dataset, target_class_index):
 
     new_dataset = pd.DataFrame()
     new_dataset_outsamples = pd.DataFrame()
-    print('aqui')
     print(value_counts)
     print(min_class_size)
     for index in value_counts.index:
