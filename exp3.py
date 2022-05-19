@@ -30,8 +30,10 @@ def run_experiment_main(path, target_class_index, n_classes, subset, exp, downsa
     print(dataset_reader.dataset_size(dataset, target_class_index))
     class_names = dataset_reader.class_names(dataset, target_class_index)
 
-
+    f = 1
     for X_train, y_train, X_test, y_test in dataset_spliter.split_train_test(dataset, target_class_index, 10):
+        print("Fold: %s" % f)
+        f+=1
         X_val, y_val = dataset_spliter.split_x_y(newdataset, target_class_index)
         X_test = pd.concat([X_test, X_val])
         y_test = pd.concat([y_test, y_val])
@@ -54,8 +56,10 @@ def run_experiment(path, target_class_index, n_classes, subset, exp, downsample=
         dataset, newdataset = dataset_sampling.downsample(dataset, target_class_index)
     print(dataset_reader.dataset_size(dataset, target_class_index))
     class_names = dataset_reader.class_names(dataset, target_class_index)
-
+    f = 1
     for X_train, y_train, X_test, y_test in dataset_spliter.split_train_test(dataset, target_class_index, 10):
+        print("Fold: %s" % f)
+        f+=1
         X_val, y_val = dataset_spliter.split_x_y(newdataset, target_class_index)
         X_test = pd.concat([X_test, X_val])
         y_test = pd.concat([y_test, y_val])

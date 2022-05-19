@@ -136,5 +136,5 @@ dataset/
 venv/
 test/
 Experiments/
-*.csv
+vector_models/
 >>>>>>> 6f83125687e848494907fe43452a84a8aed294aa
