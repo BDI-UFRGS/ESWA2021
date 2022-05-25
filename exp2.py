@@ -9,7 +9,6 @@ import numpy as np
 
 
 y_test_all = []
-y_test_all2 = []
 bnb = []
 gnb = []
 dt = []
@@ -18,9 +17,12 @@ lr = []
 svm = []
 fnn = []
 fnn_rnn = []
-main_fnn_rnn = []
 
-def run_experiment_main(path, target_class_index, n_classes, subset, exp, downsample=True):
+y_test_p2 = []
+fnn_rnn_p2 = []
+
+
+def run_experiment_p2(path, target_class_index, n_classes, subset, exp, downsample=True):
     print("Experiment: %s" % exp)
     dataset = dataset_reader.read(path=path, sep=';', target_class_index=target_class_index, n_classes=n_classes, subset=subset)
     print(dataset_reader.dataset_size(dataset, target_class_index))
@@ -39,12 +41,13 @@ def run_experiment_main(path, target_class_index, n_classes, subset, exp, downsa
         y_test = pd.concat([y_test, y_val])
         print('Train instances: %s' % len(y_train))
         print('Test instances: %s' % len(y_test))
-        y_test_all2.append(y_test)
+        y_test_p2.append(y_test)
 
         main_fnn_rnn_predictions, train_time, test_time = FNN_RNN.run(X_train, y_train, X_test, n_classes, epochs=10, proba=True)
         result.save_results('%s-%s-%s' % (exp, 'main-fnn-rnn', path.replace('/', '-')), y_test, main_fnn_rnn_predictions, class_names, train_time, test_time, len(y_train), len(y_test))
-        main_fnn_rnn.append(main_fnn_rnn_predictions)
-    return class_names
+        fnn_rnn_p2.append(main_fnn_rnn_predictions)
+
+    result.save_confusion_matrix_all('1-p2', y_test_p2, fnn_rnn_p2, class_names)
 
 
 def run_experiment(path, target_class_index, n_classes, subset, exp, downsample=True):
@@ -100,28 +103,27 @@ def run_experiment(path, target_class_index, n_classes, subset, exp, downsample=
         # svm.append(svm_prediction)
         fnn.append(fnn_predictions)
         fnn_rnn.append(fnn_rnn_predictions)
+    
+    result.save_confusion_matrix_all('1-bnb', y_test_all, bnb, class_names)
+    result.save_confusion_matrix_all('1-gnb', y_test_all, gnb, class_names)
+    result.save_confusion_matrix_all('1-dt', y_test_all, dt, class_names)
+    result.save_confusion_matrix_all('1-rf', y_test_all, rf, class_names)
+    result.save_confusion_matrix_all('1-lr', y_test_all, lr, class_names)
+    # result.save_confusion_matrix_all('1-svm', y_test_all, svm, class_names)
+    result.save_confusion_matrix_all('1-fnn', y_test_all, fnn, class_names)
+    result.save_confusion_matrix_all('1-p1', y_test_all, fnn_rnn, class_names)
 
-    return class_names
+    
 
 
-def run():
-    class_names = run_experiment('fasttext-crawl-300d-2M.csv',  0, 5, [2], '2', downsample=True)
+def run(dataset):
+    run_experiment('%sfasttext-crawl-300d-2M.csv' % dataset, 1, 30, [1], '1', downsample=True)
 
 
-    result.save_confusion_matrix_all('2-bnb', y_test_all, bnb, class_names)
-    result.save_confusion_matrix_all('2-gnb', y_test_all, gnb, class_names)
-    result.save_confusion_matrix_all('2-dt', y_test_all, dt, class_names)
-    result.save_confusion_matrix_all('2-rf', y_test_all, rf, class_names)
-    result.save_confusion_matrix_all('2-lr', y_test_all, lr, class_names)
-    # result.save_confusion_matrix_all('2-svm', y_test_all, svm, class_names)
-    result.save_confusion_matrix_all('2-fnn', y_test_all, fnn, class_names)
-    result.save_confusion_matrix_all('2-p1', y_test_all, fnn_rnn, class_names)
+    run_experiment_p2('%sfasttext-crawl-300d-2M.csv' % dataset, 1, 30, [1, 2], '1', downsample=True)
 
-    class_names = run_experiment_main('fasttext-crawl-300d-2M.csv',  0, 5, [2, 3], '2', downsample=True)
 
-    result.save_confusion_matrix_all('2-p2', y_test_all2, main_fnn_rnn, class_names)
-
-    roc_curve.plot_mean("ROC curve of the Experiment 2", [('Bernoulli Naive Bayes', y_test_all, bnb), 
+    roc_curve.plot_mean("ROC curve of the Experiment 1", [('Bernoulli Naive Bayes', y_test_all, bnb), 
                                      ('Gaussian Naive Bayes',y_test_all, gnb),
                                      ('Decision Tree', y_test_all, dt),
                                      ('Random Forest', y_test_all, rf),
@@ -129,4 +131,4 @@ def run():
                                     #  ('SVM',y_test_all, svm),
                                      ('FNN',y_test_all, fnn),
                                      ('P1 (Proposed)',y_test_all, fnn_rnn),
-                                     ('P2 (Proposed)',y_test_all2, main_fnn_rnn)])
+                                     ('P2 (Proposed)',y_test_p2, fnn_rnn_p2)])

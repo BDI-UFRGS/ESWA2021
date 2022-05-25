@@ -137,4 +137,6 @@ venv/
 test/
 Experiments/
 vector_models/
+dataset1_*
+dataset2_*
 >>>>>>> 6f83125687e848494907fe43452a84a8aed294aa

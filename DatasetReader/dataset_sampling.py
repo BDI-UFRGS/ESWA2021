@@ -4,22 +4,22 @@ import numpy as np
 np.random.seed(1)
 
 
-def get_minority_class_size(dataset, target_class_index):
-    value_counts = dataset[dataset.columns[target_class_index]].value_counts()
-    return min([dataset[dataset[dataset.columns[target_class_index]] == index].shape[0] for index in value_counts.index])
+def get_minority_class_size(dataset):
+    value_counts = dataset[dataset.columns[0]].value_counts()
+    return min([dataset[dataset[dataset.columns[0]] == index].shape[0] for index in value_counts.index])
 
 
-def downsample(dataset, target_class_index):
-    value_counts = dataset[dataset.columns[target_class_index]].value_counts()
+def downsample(dataset):
+    value_counts = dataset[dataset.columns[0]].value_counts()
 
-    min_class_size = get_minority_class_size(dataset, target_class_index) - 1
+    min_class_size = get_minority_class_size(dataset) - 1
 
     new_dataset = pd.DataFrame()
     new_dataset_outsamples = pd.DataFrame()
     print(value_counts)
     print(min_class_size)
     for index in value_counts.index:
-        item = dataset[dataset[dataset.columns[target_class_index]] == index]
+        item = dataset[dataset[dataset.columns[0]] == index]
         item_shape = item.shape[0]
         all_indexes = pd.Index(np.arange(item_shape))
         chosen_idx = np.random.choice(item_shape, replace=False, size=min_class_size) 

@@ -48,7 +48,7 @@ def plot_mean(exp, models):
     plt.ylabel('True Positive Rate')
     plt.title('%s' % exp.capitalize())
     plt.legend(loc="lower right")
-    plt.savefig('../results/%s.png' % exp, bbox_inches='tight', dpi=1000)
+    plt.savefig('%s.png' % exp, bbox_inches='tight', dpi=1000)
 
 def plot(y_test, predictions):
     y_test = [np.argmax(t, axis=0) for t in np.asarray(y_test)]
